@@ -1,18 +1,84 @@
 import { User, X } from "lucide-react";
+import { useState } from "react";
+
+type taskType = {
+  id: number;
+  title: string;
+  isCompleted: boolean;
+};
+
+type employeeType = {
+  id: number;
+  tasks: taskType[];
+};
 
 export default function Dashboard() {
-  const employees: {
-    id: number;
-    tasks: { title: string; isCompleted: boolean }[];
-  }[] = [
+  const [employees, setEmployees] = useState<employeeType[]>([
     {
       id: 100,
       tasks: [
-        { title: "this", isCompleted: true },
-        { title: "that", isCompleted: false },
+        { id: 0, title: "this", isCompleted: true },
+        { id: 1, title: "that", isCompleted: false },
       ],
     },
-  ];
+    {
+      id: 101,
+      tasks: [
+        { id: 0, title: "this", isCompleted: true },
+        { id: 1, title: "that", isCompleted: false },
+      ],
+    },
+    {
+      id: 102,
+      tasks: [
+        { id: 0, title: "this", isCompleted: true },
+        { id: 1, title: "that", isCompleted: false },
+      ],
+    },
+    {
+      id: 103,
+      tasks: [
+        { id: 0, title: "this", isCompleted: true },
+        { id: 1, title: "that", isCompleted: false },
+      ],
+    },
+  ]);
+
+  function ToggleTask(empID: number, taskID: number) {
+    setEmployees((prev) =>
+      prev.map((employee) =>
+        employee.id !== empID
+          ? employee
+          : {
+              ...employee,
+              tasks: employee.tasks.map((task) =>
+                task.id !== taskID
+                  ? task
+                  : {
+                      ...task,
+                      isCompleted: !task.isCompleted,
+                    }
+              ),
+            }
+      )
+    );
+  }
+
+  function deleteTask(empID: number, taskID: number) {
+    setEmployees((prev) =>
+      prev.map((employee) =>
+        employee.id !== empID
+          ? employee
+          : {
+              ...employee,
+              tasks: employee.tasks.filter((task) =>
+                task.id !== taskID ? task : !task
+              ),
+            }
+      )
+    );
+  }
+
   return (
     <>
       <div className="grid grid-cols-1 overflow-x-hidden grid-row-5 h-screen gap-0">
@@ -52,19 +118,23 @@ export default function Dashboard() {
                 </div>
                 <p className="text-emerald-800">Tasks</p>
                 <div className="text-neutral-600 px-2">
-                  {employee.tasks.map((task, idx) => (
+                  {employee.tasks.map((task) => (
                     <div
-                      key={idx}
+                      key={task.id}
                       className="flex flex-row gap-1 hover:bg-green-950/10 items-center cursor-pointer pl-2 rounded-sm"
                     >
                       <input
                         type="checkbox"
                         checked={task.isCompleted}
+                        onChange={() => ToggleTask(employee.id, task.id)}
                         name="idk"
                         id="thi"
                       />
                       <p>{task.title}</p>
-                      <X className="p-1 ml-auto rounded-sm m-1 hover:bg-linear-to-l hover:from-red-700 hover:to-red-600 hover:text-white" />
+                      <X
+                        className="p-1 ml-auto rounded-sm m-1 hover:bg-linear-to-l hover:from-red-700 hover:to-red-600 hover:text-white"
+                        onClick={() => deleteTask(employee.id, task.id)}
+                      />
                     </div>
                   ))}
                 </div>
