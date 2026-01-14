@@ -1,58 +1,16 @@
 import { User, X } from "lucide-react";
 
 export default function Dashboard() {
-  const employees: { id: number; tasks: string[] }[] = [
+  const employees: {
+    id: number;
+    tasks: { title: string; isCompleted: boolean }[];
+  }[] = [
     {
       id: 100,
-      tasks: ["this", "that", "another one"],
-    },
-    {
-      id: 101,
-      tasks: ["this", "that", "another one"],
-    },
-    {
-      id: 102,
-      tasks: ["this", "that", "another one"],
-    },
-    {
-      id: 103,
-      tasks: ["this", "that", "another one"],
-    },
-    {
-      id: 104,
-      tasks: ["this", "that", "another one"],
-    },
-    {
-      id: 105,
-      tasks: ["this", "that", "another one"],
-    },
-    {
-      id: 106,
-      tasks: ["this", "that", "another one"],
-    },
-    {
-      id: 107,
-      tasks: ["this", "that", "another one"],
-    },
-    {
-      id: 108,
-      tasks: ["this", "that", "another one"],
-    },
-    {
-      id: 109,
-      tasks: ["this", "that", "another one"],
-    },
-    {
-      id: 110,
-      tasks: ["this", "that", "another one"],
-    },
-    {
-      id: 111,
-      tasks: ["this", "that", "another one"],
-    },
-    {
-      id: 112,
-      tasks: ["this", "that", "another one"],
+      tasks: [
+        { title: "this", isCompleted: true },
+        { title: "that", isCompleted: false },
+      ],
     },
   ];
   return (
@@ -81,7 +39,7 @@ export default function Dashboard() {
             {employees.map((employee) => (
               <div
                 key={employee.id}
-                className="rounded-lg shadow-lg shadow-green-800/10 h-max p-5 mx-3 grid gap-1 grow sm:grow-0"
+                className="rounded-lg shadow-lg shadow-green-800/10 h-max p-5 mx-3 flex flex-col gap-1 grow sm:grow-0"
               >
                 <div className="flex items-center py-2 gap-3">
                   <User className="text-green-600 size-10 rounded-full shadow-lg shadow-green-600/20 p-3" />
@@ -99,8 +57,13 @@ export default function Dashboard() {
                       key={idx}
                       className="flex flex-row gap-1 hover:bg-green-950/10 items-center cursor-pointer pl-2 rounded-sm"
                     >
-                      <input type="checkbox" name="idk" id="thi" />
-                      <p>{task}</p>
+                      <input
+                        type="checkbox"
+                        checked={task.isCompleted}
+                        name="idk"
+                        id="thi"
+                      />
+                      <p>{task.title}</p>
                       <X className="p-1 ml-auto rounded-sm m-1 hover:bg-linear-to-l hover:from-red-700 hover:to-red-600 hover:text-white" />
                     </div>
                   ))}
