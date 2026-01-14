@@ -1,11 +1,12 @@
 import { DatabaseProvider } from "./context/context";
-import Login from "./pages/login";
+
+import Router from "./routes/route";
 function App() {
   return (
     <>
       <DatabaseProvider>
         <div className="font-inter">
-          <Login />
+          <Router />
         </div>
       </DatabaseProvider>
     </>
