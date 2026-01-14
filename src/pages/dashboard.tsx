@@ -76,12 +76,12 @@ export default function Dashboard() {
         </div>
 
         {/* employee section */}
-        <div className="row-span-4 flex items-start gap-3 flex-wrap">
-          <div className="flex flex-wrap justify-center">
+        <div className="row-span-4 mt-8 flex items-start gap-3 flex-wrap">
+          <div className="flex flex-wrap justify-center ">
             {employees.map((employee) => (
               <div
                 key={employee.id}
-                className="rounded-lg shadow-lg shadow-green-800/10 h-max p-5 mx-3 grid gap-1"
+                className="rounded-lg shadow-lg shadow-green-800/10 h-max p-5 mx-3 grid gap-1 grow sm:grow-0"
               >
                 <div className="flex items-center py-2 gap-3">
                   <User className="text-green-600 size-10 rounded-full shadow-lg shadow-green-600/20 p-3" />
