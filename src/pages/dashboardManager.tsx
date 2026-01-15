@@ -78,6 +78,9 @@ export default function Dashboard() {
       )
     );
   }
+  function deleteEmployee(empID: number) {
+    setEmployees((prev) => prev.filter((employee) => employee.id !== empID));
+  }
 
   return (
     <>
@@ -138,7 +141,10 @@ export default function Dashboard() {
                     </div>
                   ))}
                 </div>
-                <button className="ring ring-red-800 font-semibold rounded-sm px-2 py-1 text-red-700 hover:bg-linear-to-l hover:from-red-700 hover:to-red-600 cursor-pointer hover:text-white hover:ring-0">
+                <button
+                  className="ring ring-red-800 font-semibold rounded-sm px-2 py-1 text-red-700 hover:bg-linear-to-l hover:from-red-700 hover:to-red-600 cursor-pointer hover:text-white hover:ring-0"
+                  onClick={() => deleteEmployee(employee.id)}
+                >
                   Remove Employee
                 </button>
               </div>
