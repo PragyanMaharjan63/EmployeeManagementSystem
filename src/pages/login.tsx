@@ -44,7 +44,7 @@ export default function Login() {
           <div>
             <p>Choose Role</p>
             <select
-              className="ring-1 ring-green-600 px-3 py-2 rounded-sm focus:outline-4 outline-green-600/40 "
+              className="ring-1 ring-green-600 px-3 py-2 rounded-sm focus:outline-4 outline-green-600/40 w-60"
               value={selectedRole}
               onChange={(e) => setSelectedRole(e.target.value)}
             >
