@@ -1,6 +1,7 @@
 import { Plus, User, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import Popup from "../assets/popus";
+import { useNavigate } from "react-router-dom";
 
 type taskType = {
   id: number;
@@ -14,37 +15,12 @@ type employeeType = {
 };
 
 export default function Dashboard() {
+  const navigate = useNavigate();
   const [activeEmpID, setActiveEmpID] = useState<number | null>(null);
-  const [employees, setEmployees] = useState<employeeType[]>([
-    {
-      id: 100,
-      tasks: [
-        { id: 0, title: "this", isCompleted: true },
-        { id: 1, title: "that", isCompleted: false },
-      ],
-    },
-    {
-      id: 101,
-      tasks: [
-        { id: 0, title: "this", isCompleted: true },
-        { id: 1, title: "that", isCompleted: false },
-      ],
-    },
-    {
-      id: 102,
-      tasks: [
-        { id: 0, title: "this", isCompleted: true },
-        { id: 1, title: "that", isCompleted: false },
-      ],
-    },
-    {
-      id: 103,
-      tasks: [
-        { id: 0, title: "this", isCompleted: true },
-        { id: 1, title: "that", isCompleted: false },
-      ],
-    },
-  ]);
+  const [employees, setEmployees] = useState<employeeType[]>(() => {
+    const sotred = localStorage.getItem("employee");
+    return sotred ? JSON.parse(sotred) : [];
+  });
 
   useEffect(() => {
     localStorage.setItem("employee", JSON.stringify(employees));
@@ -141,7 +117,10 @@ export default function Dashboard() {
                   Add employee
                 </div>
               </div>
-              <p className="ring-1 ring-green-600 px-3 py-1 md:px-5 md:py-3 rounded-sm bg-linear-to-r from-green-600 to-green-700 shadow-lg text-white font-semibold cursor-pointer hover:from-green-700 hover:to-green-800 w-max h-max">
+              <p
+                className="ring-1 ring-green-600 px-3 py-1 md:px-5 md:py-3 rounded-sm bg-linear-to-r from-green-600 to-green-700 shadow-lg text-white font-semibold cursor-pointer hover:from-green-700 hover:to-green-800 w-max h-max"
+                onClick={() => navigate("/")}
+              >
                 Logout
               </p>
             </div>

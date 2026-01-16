@@ -1,40 +1,59 @@
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+type taskType = {
+  id: number;
+  title: string;
+  isCompleted: boolean;
+};
+type employeeType = {
+  id: number;
+  tasks: taskType[];
+};
+
 export default function Login() {
+  const navigate = useNavigate();
+
+  const [selectedRole, setSelectedRole] = useState<string>("manager");
+  const [employees, setEmployees] = useState<employeeType[]>(() => {
+    const sotred = localStorage.getItem("employee");
+    return sotred ? JSON.parse(sotred) : [];
+  });
+
+  function handlesubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (selectedRole === "manager") {
+      navigate("/manager");
+    } else {
+      navigate(`/employee/${selectedRole}`);
+    }
+  }
+
   return (
     <>
       <div className="grid h-screen place-items-center ">
         <form
-          action=""
+          onSubmit={handlesubmit}
           className="rounded-lg p-8 grid gap-y-4 shadow-xl shadow-green-700/20"
         >
           <div>
             <p className="text-center font-bold text-2xl">Login</p>
             <p className="text-center text-neutral-700">Welcome back!</p>
           </div>
-          <div>
-            <p className="text-neutral-500">Username</p>
-            <input
-              className="ring-1 ring-green-600 px-3 py-2 rounded-sm focus:outline-4 outline-green-600/40"
-              type="text"
-              name="username"
-              id="Username"
-              placeholder="Enter your username"
-            />
-          </div>
-          <div>
-            <p className="text-neutral-500">Password</p>
-            <input
-              className="ring-1 ring-green-600 px-3 py-2 rounded-sm focus:outline-4 outline-green-600/40"
-              type="password"
-              name="password"
-              id="password"
-              placeholder="Enter your Password"
-            />
-          </div>
+
           <div>
             <p>Choose Role</p>
-            <select className="ring-1 ring-green-600 px-3 py-2 rounded-sm focus:outline-4 outline-green-600/40 ">
+            <select
+              className="ring-1 ring-green-600 px-3 py-2 rounded-sm focus:outline-4 outline-green-600/40 "
+              value={selectedRole}
+              onChange={(e) => setSelectedRole(e.target.value)}
+            >
               <option>Manager</option>
-              <option>Employee 1</option>
+              {employees.map((employee) => (
+                <option key={employee.id} value={employee.id}>
+                  Employee {employee.id}
+                </option>
+              ))}
             </select>
           </div>
           <input
