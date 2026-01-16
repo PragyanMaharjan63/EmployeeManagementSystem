@@ -15,10 +15,10 @@ export default function Login() {
   const navigate = useNavigate();
 
   const [selectedRole, setSelectedRole] = useState<string>("manager");
-  const [employees, setEmployees] = useState<employeeType[]>(() => {
+  const employees: employeeType[] = (() => {
     const sotred = localStorage.getItem("employee");
     return sotred ? JSON.parse(sotred) : [];
-  });
+  })();
 
   function handlesubmit(e: React.FormEvent) {
     e.preventDefault();
