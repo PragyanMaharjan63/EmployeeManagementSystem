@@ -1,5 +1,6 @@
-import { User, X } from "lucide-react";
-import { useState } from "react";
+import { Plus, User, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import Popup from "../assets/popus";
 
 type taskType = {
   id: number;
@@ -13,6 +14,7 @@ type employeeType = {
 };
 
 export default function Dashboard() {
+  const [activeEmpID, setActiveEmpID] = useState<number | null>(null);
   const [employees, setEmployees] = useState<employeeType[]>([
     {
       id: 100,
@@ -43,6 +45,10 @@ export default function Dashboard() {
       ],
     },
   ]);
+
+  useEffect(() => {
+    localStorage.setItem("employee", JSON.stringify(employees));
+  }, [employees]);
 
   function ToggleTask(empID: number, taskID: number) {
     setEmployees((prev) =>
@@ -81,21 +87,61 @@ export default function Dashboard() {
   function deleteEmployee(empID: number) {
     setEmployees((prev) => prev.filter((employee) => employee.id !== empID));
   }
+  function addEmployee() {
+    let empid = Date.now();
+    setEmployees((prev) => [...prev, { id: empid, tasks: [] }]);
+  }
+
+  function addtask(empID: number, title: string) {
+    setEmployees((prev) =>
+      prev.map((employee) => {
+        if (employee.id !== empID) return employee;
+        const newTaskID =
+          employee.tasks.length === 0
+            ? 0
+            : Math.max(...employee.tasks.map((t) => t.id)) + 1;
+        return {
+          ...employee,
+          tasks: [
+            ...employee.tasks,
+            {
+              id: newTaskID,
+              title: title,
+              isCompleted: false,
+            },
+          ],
+        };
+      })
+    );
+  }
 
   return (
     <>
+      {activeEmpID !== null && (
+        <Popup
+          empID={activeEmpID}
+          addtaskfunc={addtask}
+          onClose={() => setActiveEmpID(null)}
+        />
+      )}
       <div className="grid grid-cols-1 overflow-x-hidden grid-row-5 h-screen gap-0">
         <div className="row-span-1">
           <div className="flex gap-3 h-full justify-center md:justify-start md:px-[5vw]  items-center">
             <User className="text-green-600 size-20 rounded-full shadow-lg shadow-green-600/20 p-3" />
-            <div className="flex flex-col justify-between md:w-full  md:flex-row  gap-1">
-              <div>
+            <div className="flex flex-col md:items-center items-start md:justify-between md:w-full  md:flex-row  gap-1">
+              <div className="grid gap-1">
                 <p className="text-xl font-semibold text-emerald-800">
                   Pragyan Maharjan
                 </p>
                 <p className="text-sm text-neutral-500">Manager</p>
+                <div
+                  className="ring-1 ring-green-600 px-3 py-1 rounded-sm bg-linear-to-r from-green-600 to-green-700 shadow-lg text-white font-semibold cursor-pointer hover:from-green-700 hover:to-green-800 w-max h-max"
+                  onClick={addEmployee}
+                >
+                  Add employee
+                </div>
               </div>
-              <p className="ring-1 ring-green-600 px-5 py-3 rounded-sm bg-linear-to-r from-green-600 to-green-700 shadow-lg text-white font-semibold cursor-pointer hover:from-green-700 hover:to-green-800 w-max">
+              <p className="ring-1 ring-green-600 px-3 py-1 md:px-5 md:py-3 rounded-sm bg-linear-to-r from-green-600 to-green-700 shadow-lg text-white font-semibold cursor-pointer hover:from-green-700 hover:to-green-800 w-max h-max">
                 Logout
               </p>
             </div>
@@ -119,7 +165,13 @@ export default function Dashboard() {
                     <p className="text-xs text-neutral-500">{employee.id}</p>
                   </div>
                 </div>
-                <p className="text-emerald-800">Tasks</p>
+                <div className="flex justify-between">
+                  <p className="text-emerald-800">Tasks</p>
+                  <Plus
+                    className="p-1 hover:bg-green-800/30 rounded-xs cursor-pointer"
+                    onClick={() => setActiveEmpID(employee.id)}
+                  />
+                </div>
                 <div className="text-neutral-600 px-2">
                   {employee.tasks.map((task) => (
                     <div
